@@ -3,8 +3,9 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const authRouter = require("./routes/authRoute");
-const userRouter = require("./routes/userRouter")
-const restaurentRouter = require("./routes/restaurentRoute")
+const userRouter = require("./routes/userRouter");
+const restaurentRouter = require("./routes/restaurentRoute");
+const categoryRouter = require("./routes/categoryRoute");
 
 const app = express();
 
@@ -15,7 +16,8 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
-app.use("/api/restaurent", restaurentRouter)
+app.use("/api/restaurent", restaurentRouter);
+app.use("/api/category", categoryRouter);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
