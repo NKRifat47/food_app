@@ -7,6 +7,8 @@ const userRouter = require("./routes/userRouter");
 const restaurentRouter = require("./routes/restaurentRoute");
 const categoryRouter = require("./routes/categoryRoute");
 const foodRouter = require("./routes/foodRoute");
+const orderRouter = require("./routes/orderRoute");
+const adminRouter = require("./routes/adminRoute");
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use("/api/user", userRouter);
 app.use("/api/restaurent", restaurentRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/food", foodRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
