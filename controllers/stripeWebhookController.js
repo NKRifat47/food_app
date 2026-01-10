@@ -1,9 +1,9 @@
 const stripe = require("../services/stripe");
 const Order = require("../models/orderModel");
+const { sendAdminOrderEmail } = require("../services/mailService");
 
 exports.stripeWebhookController = async (req, res) => {
   const sig = req.headers["stripe-signature"];
-
   let event;
 
   try {
@@ -21,12 +21,20 @@ exports.stripeWebhookController = async (req, res) => {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;
 
-    await Order.findByIdAndUpdate(orderId, {
-      paymentStatus: "paid",
-      orderStatus: "preparing",
-    });
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      {
+        paymentStatus: "paid",
+        orderStatus: "preparing",
+      },
+      { new: true }
+    )
+      .populate("items.food")
+      .populate("restaurant");
 
-    console.log("Order marked as PAID:", orderId);
+    await sendAdminOrderEmail(order);
+
+    console.log("Order marked as PAID & email sent:", orderId);
   }
 
   if (event.type === "payment_intent.payment_failed") {
